@@ -38,21 +38,39 @@ public class Main {
         Elements parrafos = doc.select("p");
         Elements imagenes = doc.select("img");
         Elements formularios = doc.select("form");
-        Elements inputsTipo = doc.select("input");
-
         IO.println("Estado: " + htmlResponse.statusCode());
         IO.println("Cantidad de lineas: " + doc.html().lines().count());
         IO.println("Parrafos: " + parrafos.size());
         IO.println("Imagenes: " + imagenes.size());
         IO.println("Formularios: " + formularios.size());
+
         for (Element form : formularios) {
-            System.out.println("Metodo de Formulario: " + formularios.attr("method"));
-            Elements inputs = formularios.select("input");
-            for (Element input : inputsTipo) {
-                System.out.println("  Nombre de Input: " + input.attr("name"));
-                System.out.println("  Tipo de Input: " + input.attr("type"));
+            String metodo = form.attr("method");
+            if (metodo.equalsIgnoreCase("Post")){
+                String action = form.attr("abs:action");
+                HttpRequest postRequest = HttpRequest.newBuilder()
+                        .uri(new URI(action))
+                        .header("Content-Type", "application/x-www-form-urlencoded")
+                        .header("matricula-id", "10154267")
+                        .POST(HttpRequest.BodyPublishers.ofString("asignatura=practica1"))
+                        .build();
+
+                HttpResponse<String> postResponse = client.send(postRequest, HttpResponse.BodyHandlers.ofString());
+
+                System.out.println("Form action: " + action);
+                System.out.println("Response status: " + postResponse.statusCode());
+                System.out.println("Response body: " + postResponse.body());
+            }
+
+
+            IO.println("Metodo de Formulario: " + form.attr("method"));
+            Elements inputs = form.select("input");
+            for (Element input : inputs) {
+                IO.println("  Nombre de Input: " + input.attr("name"));
+                IO.println("  Tipo de Input: " + input.attr("type"));
             }
         }
+
 
     }
 }
