@@ -17,7 +17,6 @@ import org.jsoup.select.Elements;
 
 public class Main {
     public static void main(String[] args) throws IOException, URISyntaxException, InterruptedException {
-        IO.println("Hello World!");
 
         Scanner scanner = new Scanner(System.in);
 
